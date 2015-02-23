@@ -1,0 +1,24 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: True
+  vars:
+    - files:
+        /root/.ssh/authorized_keys: /var/lib/jenkins/.ssh/id_rsa.pub
+  roles:
+     - load_balancer
+     - cloud_servers
+
+- hosts: raxio
+  gather_facts: True 
+  roles: 
+     - deploy
+
+- hosts: localhost
+  connection: local
+  gather_facts: True
+  roles:
+     - test
+     - drain
+     - test
+     - clean_up

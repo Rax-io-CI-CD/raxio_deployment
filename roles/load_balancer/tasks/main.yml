@@ -1,0 +1,47 @@
+# This will either create a new live load balancer or return the old one
+- name: Create live load balancer
+  local_action:
+    module: rax_clb
+    credentials: "{{ creds_servers_path }}"
+    name: "{{ load_balancer_name }}"
+    port: "{{ lb_port }}"
+    protocol: "{{ lb_protocol }}"
+    type: PUBLIC
+    timeout: 30
+    region: "{{ region }}"
+    wait: yes
+    wait_timeout: 180
+    state: present
+  register: raxio_green_load_balancer
+  tags:
+    - green-nodes
+
+# Debug the live load balancer data
+- name: Show live load balancer
+  debug: var=raxio_green_load_balancer
+  tags:
+    - green-nodes
+
+# Create blue load balancer
+- name: Create blue load balancer
+  local_action:
+    module: rax_clb
+    credentials: "{{ creds_servers_path }}"
+    name: "blue-{{ load_balancer_name }}"
+    port: "{{ lb_port }}"
+    protocol: "{{ lb_protocol }}"
+    type: PUBLIC
+    timeout: 30
+    region: "{{ region }}"
+    wait: yes
+    wait_timeout: 180
+    state: present
+  register: raxio_blue_load_balancer
+  tags:
+    - blue-nodes
+
+# Show blue load balancer data
+- name: Show temporary blue load balancer
+  debug: var=raxio_blue_load_balancer
+  tags:
+    - blue-nodes

@@ -1,0 +1,65 @@
+- name: Remove old nodes
+  local_action:
+    module: rax
+    credentials: "{{ creds_servers_path }}"
+    name: "{{ server_name }}"
+    flavor: "{{ flavor }}"
+    image: "{{ image }}"
+    region: "{{ region }}"
+    state: present
+    count: "{{ count }}"
+    group: "{{ group_environ }}"
+    count_offset: 1
+    exact_count: yes
+    wait: yes
+  tags:
+    - clean-up
+
+- name: Remove temporary load balancer
+  local_action:
+    module: rax_clb
+    credentials: "{{ creds_servers_path }}"
+    name: "b-{{ load_balancer_name }}"
+    port: "{{ lb_port }}"
+    protocol: "{{ lb_protocol }}"
+    type: PUBLIC
+    timeout: 30
+    region: "{{ region }}"
+    wait: yes
+    wait_timeout: 180
+    state: absent
+  tags:
+    - clean-up
+
+- name: Remove every node for this environment
+  local_action:
+    module: rax
+    credentials: "{{ creds_servers_path }}"
+    name: "{{ server_name }}"
+    flavor: "{{ flavor }}"
+    image: "{{ image }}"
+    region: "{{ region }}"
+    state: absent
+    count: "{{ count + new_count }}"
+    group: "{{ group_environ }}"
+    count_offset: 1
+    exact_count: yes
+    wait: yes
+  tags:
+    - purge
+
+- name: Remove live load balancer
+  local_action:
+    module: rax_clb
+    credentials: "{{ creds_servers_path }}"
+    name: "{{ load_balancer_name }}"
+    port: "{{ lb_port }}"
+    protocol: "{{ lb_protocol }}"
+    type: PUBLIC
+    timeout: 30
+    region: "{{ region }}"
+    wait: yes
+    wait_timeout: 180
+    state: absent
+  tags:
+    - purge

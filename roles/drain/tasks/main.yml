@@ -1,0 +1,77 @@
+# Add nodes registered with blue load balancer to live load balancer
+- name: Add new servers to live Load balancer
+  local_action:
+    module: rax_clb_nodes
+    credentials: "{{ creds_servers_path }}"
+    load_balancer_id: "{{ raxio_green_load_balancer.balancer.id }}"
+    address: "{{ item.rax_addresses.private[0].addr }}"
+    port: "{{ server_port }}" 
+    condition: enabled
+    type: primary
+    wait: yes
+    wait_timeout: 180
+    region: "{{ region }}"
+  with_items: raxio_blue_nodes.success
+  when: raxio_blue_nodes.action == "create"
+  tags:
+    - drain
+
+# Show all instances
+- name: show created instances
+  debug: var=raxio_blue_nodes
+  tags:
+    - drain
+
+# Drain nodes from raxio green load balancer
+- name: drain the node
+  local_action:
+    module: rax_clb_nodes
+    credentials: "{{ creds_servers_path }}"
+    load_balancer_id: "{{ raxio_green_load_balancer.balancer.id }}"
+    node_id: "{{ item.id }}"
+    condition: draining 
+    wait: true
+    wait_timeout: 180
+    region: "{{ region }}"
+  with_items: raxio_green_load_balancer.balancer.nodes
+  tags:
+    - drain
+
+# place holder task to wait for connections to clear
+- name: wait for app connections to close
+  command: echo "true"
+  register: connections
+  until: connections.stdout == "true"
+  retries: 20
+  delay: 10
+  tags:
+    - drain
+
+- name: disable the node
+  local_action:
+    module: rax_clb_nodes
+    credentials: "{{ creds_servers_path }}"
+    load_balancer_id: "{{ raxio_green_load_balancer.balancer.id }}"
+    node_id: "{{ item.id }}"
+    condition: disabled
+    wait: true
+    wait_timeout: 180
+    region: "{{ region }}"
+  with_items: raxio_green_load_balancer.balancer.nodes
+  tags:
+    - drain
+
+- name: remove the node
+  local_action:
+    module: rax_clb_nodes
+    credentials: "{{ creds_servers_path }}"
+    load_balancer_id: "{{ raxio_green_load_balancer.balancer.id }}"
+    node_id: "{{ item.id }}"
+    condition: disabled
+    wait: true
+    state: absent
+    wait_timeout: 180
+    region: "{{ region }}"
+  with_items: raxio_green_load_balancer.balancer.nodes
+  tags:
+    - drain
