@@ -28,7 +28,7 @@
     group: "{{ group_environ }}"
     count_offset: 1
     exact_count: yes
-    remove_youngest: True
+    delete_youngest: True
     wait: yes
   tags:
     - clean-up-blue
