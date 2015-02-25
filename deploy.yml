@@ -18,7 +18,6 @@
   connection: local
   gather_facts: True
   roles:
-     - test
      - drain
      - test
      - clean_up

@@ -1,26 +1,19 @@
 # Add nodes registered with blue load balancer to live load balancer
-- name: Add new servers to live Load balancer
+- name: Add BLUE nodes to GREEN Load balancer
   local_action:
     module: rax_clb_nodes
     credentials: "{{ creds_servers_path }}"
     load_balancer_id: "{{ raxio_green_load_balancer.balancer.id }}"
-    address: "{{ item.rax_addresses.private[0].addr }}"
+    address: "{{ item.address }}"
     port: "{{ server_port }}" 
     condition: enabled
     type: primary
     wait: yes
     wait_timeout: 180
     region: "{{ region }}"
-  with_items: raxio_blue_nodes.success
-  when: raxio_blue_nodes.action == "create"
+  with_items: raxio_blue_load_balancer.balancer.nodes
   tags:
-    - drain
-
-# Show all instances
-- name: show created instances
-  debug: var=raxio_blue_nodes
-  tags:
-    - drain
+    - blue-to-green
 
 # Drain nodes from raxio green load balancer
 - name: drain the node
@@ -35,7 +28,7 @@
     region: "{{ region }}"
   with_items: raxio_green_load_balancer.balancer.nodes
   tags:
-    - drain
+    - blue-to-green
 
 # place holder task to wait for connections to clear
 - name: wait for app connections to close
@@ -45,7 +38,7 @@
   retries: 20
   delay: 10
   tags:
-    - drain
+    - blue-to-green
 
 - name: disable the node
   local_action:
@@ -59,7 +52,7 @@
     region: "{{ region }}"
   with_items: raxio_green_load_balancer.balancer.nodes
   tags:
-    - drain
+    - blue-to-green
 
 - name: remove the node
   local_action:
@@ -74,4 +67,21 @@
     region: "{{ region }}"
   with_items: raxio_green_load_balancer.balancer.nodes
   tags:
-    - drain
+    - blue-to-green
+
+- name: Add GREEN nodes to BLUE Load balancer
+  local_action:
+    module: rax_clb_nodes
+    credentials: "{{ creds_servers_path }}"
+    load_balancer_id: "{{ raxio_blue_load_balancer.balancer.id }}"
+    address: "{{ item.address }}"
+    port: "{{ server_port }}" 
+    condition: enabled
+    type: primary
+    wait: yes
+    wait_timeout: 180
+    region: "{{ region }}"
+  with_items: raxio_green_load_balancer.balancer.nodes
+  tags:
+    - blue-to-green
+

@@ -3,7 +3,7 @@
   local_action:
     module: rax_clb
     credentials: "{{ creds_servers_path }}"
-    name: "{{ load_balancer_name }}"
+    name: "green-{{ load_balancer_name }}"
     port: "{{ lb_port }}"
     protocol: "{{ lb_protocol }}"
     type: PUBLIC
@@ -14,13 +14,13 @@
     state: present
   register: raxio_green_load_balancer
   tags:
-    - green-nodes
+    - green-lb
 
 # Debug the live load balancer data
 - name: Show live load balancer
   debug: var=raxio_green_load_balancer
   tags:
-    - green-nodes
+    - green-lb
 
 # Create blue load balancer
 - name: Create blue load balancer
@@ -38,10 +38,10 @@
     state: present
   register: raxio_blue_load_balancer
   tags:
-    - blue-nodes
+    - blue-lb
 
 # Show blue load balancer data
 - name: Show temporary blue load balancer
   debug: var=raxio_blue_load_balancer
   tags:
-    - blue-nodes
+    - blue-lb

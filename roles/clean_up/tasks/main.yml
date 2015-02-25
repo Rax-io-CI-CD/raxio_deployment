@@ -1,4 +1,4 @@
-- name: Remove old nodes
+- name: Remove OLD nodes
   local_action:
     module: rax
     credentials: "{{ creds_servers_path }}"
@@ -13,13 +13,31 @@
     exact_count: yes
     wait: yes
   tags:
-    - clean-up
+    - clean-up-green
 
-- name: Remove temporary load balancer
+- name: Remove BLUE nodes
+  local_action:
+    module: rax
+    credentials: "{{ creds_servers_path }}"
+    name: "{{ server_name }}"
+    flavor: "{{ flavor }}"
+    image: "{{ image }}"
+    region: "{{ region }}"
+    state: present
+    count: "{{ count }}"
+    group: "{{ group_environ }}"
+    count_offset: 1
+    exact_count: yes
+    remove_youngest: True
+    wait: yes
+  tags:
+    - clean-up-blue
+
+- name: Remove BLUE load balancer
   local_action:
     module: rax_clb
     credentials: "{{ creds_servers_path }}"
-    name: "b-{{ load_balancer_name }}"
+    name: "blue-{{ load_balancer_name }}"
     port: "{{ lb_port }}"
     protocol: "{{ lb_protocol }}"
     type: PUBLIC
@@ -29,7 +47,8 @@
     wait_timeout: 180
     state: absent
   tags:
-    - clean-up
+    - clean-up-blue
+    - clean-up-green
 
 - name: Remove every node for this environment
   local_action:

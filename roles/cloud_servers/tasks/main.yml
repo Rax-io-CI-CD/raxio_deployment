@@ -24,38 +24,6 @@
   tags:
     - green-nodes
 
-# Add new servers to raxio host group (won't be added for existing)
-- name: Add new servers to raxio host group
-  local_action:
-    module: add_host
-    hostname: "{{ item.name }}"
-    ansible_ssh_host: "{{ item.rax_accessipv4 }}"
-    ansible_ssh_pass: "{{ item.rax_adminpass }}"
-    ansible_ssh_user: root
-    groupname: raxio
-  with_items: raxio_green_nodes.success
-  when: raxio_green_nodes.action == "create"
-  tags:
-    - green-nodes
-
-# Add new servers to live load balancer (skipped for existing)
-- name: Add new servers to live Load balancer
-  local_action:
-    module: rax_clb_nodes
-    credentials: "{{ creds_servers_path }}"
-    load_balancer_id: "{{ raxio_green_load_balancer.balancer.id }}"
-    address: "{{ item.rax_addresses.private[0].addr }}"
-    port: "{{ server_port }}" 
-    condition: enabled
-    type: primary
-    wait: yes
-    wait_timeout: 180
-    region: "{{ region }}"
-  with_items: raxio_green_nodes.success
-  when: raxio_green_nodes.action == "create"
-  tags:
-    - green-nodes
-
 # Create new blue servers (show always be created anew)
 - name: Create blue servers
   local_action:    
@@ -82,7 +50,7 @@
     - blue-nodes
 
 # Add new servers to raxio group, just as before
-- name: Add new servers to raxio host group
+- name: Add BLUE servers to raxio host group
   local_action:
     module: add_host
     hostname: "{{ item.name }}"
@@ -96,7 +64,7 @@
     - blue-nodes
 
 # Add new servers to blue load balancer
-- name: Add new servers to Blue Load balancer
+- name: Add BLUE servers to Blue Load balancer
   local_action:
     module: rax_clb_nodes
     credentials: "{{ creds_servers_path }}"

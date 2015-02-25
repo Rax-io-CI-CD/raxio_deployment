@@ -1,5 +1,12 @@
 ---
-- name: Install application here
-  file: path=/opt/chef state=directory
+- name: Clone repository
+  git: repo={{ openstack_repo }} dest=/src/my_app
+  tags:
+    - deploy
+
+- name: Install application
+  command: python app.py
+  args:
+    chdir: /src/my_app
   tags:
     - deploy
