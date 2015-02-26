@@ -29,6 +29,11 @@
   tags:
     - deploy
 
+- name: Create repository directory
+  file: path=/src/my_app state=directory
+  tags:
+    - deploy
+
 - name: Clone repository
   git: repo={{ openstack_repo }} dest=/src/my_app accept_hostkey=True
   tags:
@@ -44,7 +49,7 @@
     - deploy
 
 - name: Pip install requirements
-  command: cd /src/my_app && pip install -rrequirements.txt
+  command: pip install -rrequirements.txt
   args:
     chdir: /src/my_app
   async: 45
@@ -53,7 +58,7 @@
     - deploy
 
 - name: Pip install requirements
-  command: cd /src/my_app && pip install -rtest-requirements.txt
+  command: pip install -rtest-requirements.txt
   args:
     chdir: /src/my_app
   async: 45
