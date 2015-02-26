@@ -39,20 +39,6 @@
   tags:
     - deploy
 
-- name: List
-  shell: ls
-  async: 45
-  poll: 5  
-  tags:
-    - deploy
-
-- name: List
-  shell: cd /src/my_app && ls 
-  async: 45
-  poll: 5  
-  tags:
-    - deploy
-
 - name: Pip install requirements
   shell: cd /src/my_app && pip install -rrequirements.txt
   async: 45
