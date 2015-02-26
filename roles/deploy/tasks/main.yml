@@ -39,7 +39,7 @@
   args:
     chdir: /src/my_app
   async: 45
-    poll: 5  
+  poll: 5  
   tags:
     - deploy
 
@@ -48,6 +48,6 @@
   args:
     chdir: /src/my_app
   async: 45
-    poll: 5  
+  poll: 5  
   tags:
     - deploy
