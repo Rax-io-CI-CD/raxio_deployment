@@ -4,8 +4,40 @@
   tags:
     - deploy
 
+- name: Install build-essential
+  apt: pkg=build-essential state=latest update_cache=yes cache_valid_time=86400
+  tags:
+    - deploy
+
+- name: Install software-properties-common
+  apt: name=software-properties-common update_cache=yes
+  tags:
+    - deploy
+
+- name: Install python-software-properties
+  apt: name=python-software-properties update_cache=yes
+  tags:
+    - deploy
+    
+- name: Install python-pip
+  apt: name=python-pip update_cache=yes
+  tags:
+    - deploy
+    
+- name: Install python2.7-dev
+  apt: name=python2.7-dev update_cache=yes
+  tags:
+    - deploy
+
 - name: Clone repository
   git: repo={{ openstack_repo }} dest=/src/my_app accept_hostkey=True
+  tags:
+    - deploy
+
+- name: Pip install requirements
+  command: pip install -rrequirements.txt 
+  args:
+    chdir: /src/my_app
   tags:
     - deploy
 
