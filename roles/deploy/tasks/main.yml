@@ -40,9 +40,7 @@
     - deploy
 
 - name: List
-  command: cd /src/my_app && ls -la
-  args:
-    chdir: /src/my_app
+  command: pwd && cd /src && ls -la 
   async: 45
   poll: 5  
   tags:
