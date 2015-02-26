@@ -35,7 +35,7 @@
     - deploy
 
 - name: List
-  command: ls -la
+  command: cd /src/my_app && ls -la
   args:
     chdir: /src/my_app
   async: 45
