@@ -1,4 +1,7 @@
 ---
+- name: Download git
+  apt: name=git update_cache=yes
+  
 - name: Clone repository
   git: repo={{ openstack_repo }} dest=/src/my_app
   tags:
