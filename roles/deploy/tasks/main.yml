@@ -47,7 +47,7 @@
     - deploy
 
 - name: List
-  shell: cd /src && ls -la 
+  shell: cd /src/my_app && ls 
   async: 45
   poll: 5  
   tags:
