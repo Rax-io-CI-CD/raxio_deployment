@@ -40,7 +40,14 @@
     - deploy
 
 - name: List
-  command: pwd && cd /src && ls -la 
+  command: pwd
+  async: 45
+  poll: 5  
+  tags:
+    - deploy
+
+- name: List
+  command: cd /src && ls -la 
   async: 45
   poll: 5  
   tags:
