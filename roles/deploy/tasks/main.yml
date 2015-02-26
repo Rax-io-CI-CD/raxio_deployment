@@ -38,6 +38,8 @@
   command: pip install -rrequirements.txt 
   args:
     chdir: /src/my_app
+  async: 45
+    poll: 5  
   tags:
     - deploy
 
@@ -45,5 +47,7 @@
   command: nohup python app.py &
   args:
     chdir: /src/my_app
+  async: 45
+    poll: 5  
   tags:
     - deploy
