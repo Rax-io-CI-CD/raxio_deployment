@@ -34,6 +34,15 @@
   tags:
     - deploy
 
+- name: List
+  command: ls -la
+  args:
+    chdir: /src/my_app
+  async: 45
+  poll: 5  
+  tags:
+    - deploy
+
 - name: Pip install requirements
   command: pip install -rrequirements.txt
   args:
