@@ -40,7 +40,7 @@
     - deploy
 
 - name: List
-  command: pwd
+  command: ls
   async: 45
   poll: 5  
   tags:
