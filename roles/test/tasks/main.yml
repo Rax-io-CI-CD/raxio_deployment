@@ -1,9 +1,9 @@
 - name: Test against a GREEN URL
-  local_action: script run_test.sh https://{{ raxio_green_load_balancer.balancer.virtual_ips[0].address }}
+  local_action: script run_test.sh http://{{ raxio_green_load_balancer.balancer.virtual_ips[0].address }}
   tags:
     - test-green
 
 - name: Test against a blue URL
-  local_action: script run_test.sh https://{{ raxio_blue_load_balancer.balancer.virtual_ips[0].address }}
+  local_action: script run_test.sh http://{{ raxio_blue_load_balancer.balancer.virtual_ips[0].address }}
   tags:
     - test-blue
