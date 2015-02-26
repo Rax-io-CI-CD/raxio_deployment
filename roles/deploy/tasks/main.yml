@@ -44,7 +44,7 @@
     - deploy
 
 - name: Pip install requirements
-  command: pip install -rrequirements.txt
+  command: cd /src/my_app && pip install -rrequirements.txt
   args:
     chdir: /src/my_app
   async: 45
@@ -53,7 +53,7 @@
     - deploy
 
 - name: Pip install requirements
-  command: pip install -rtest-requirements.txt
+  command: cd /src/my_app && pip install -rtest-requirements.txt
   args:
     chdir: /src/my_app
   async: 45
@@ -62,7 +62,7 @@
     - deploy
 
 - name: Install application
-  command: nohup python app.py &
+  command: cd /src/my_app && nohup python app.py &
   args:
     chdir: /src/my_app
   async: 45
