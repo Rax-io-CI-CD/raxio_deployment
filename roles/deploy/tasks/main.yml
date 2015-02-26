@@ -1,14 +1,16 @@
 ---
 - name: Download git
   apt: name=git update_cache=yes
-  
+  tags:
+    - deploy
+
 - name: Clone repository
   git: repo={{ openstack_repo }} dest=/src/my_app
   tags:
     - deploy
 
 - name: Install application
-  command: python app.py
+  command: nohup python app.py &
   args:
     chdir: /src/my_app
   tags:
