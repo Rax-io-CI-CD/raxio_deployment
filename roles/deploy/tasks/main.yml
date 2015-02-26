@@ -5,7 +5,7 @@
     - deploy
 
 - name: Clone repository
-  git: repo={{ openstack_repo }} dest=/src/my_app
+  git: repo={{ openstack_repo }} dest=/src/my_app accept_hostkey=True
   tags:
     - deploy
 
