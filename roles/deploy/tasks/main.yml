@@ -54,27 +54,21 @@
     - deploy
 
 - name: Pip install requirements
-  command: pip install -rrequirements.txt
-  args:
-    chdir: /src/my_app
+  shell: cd /src/my_app && pip install -rrequirements.txt
   async: 45
   poll: 5  
   tags:
     - deploy
 
 - name: Pip install requirements
-  command: pip install -rtest-requirements.txt
-  args:
-    chdir: /src/my_app
+  shell: cd /src/my_app && pip install -rtest-requirements.txt
   async: 45
   poll: 5  
   tags:
     - deploy
 
 - name: Install application
-  command: cd /src/my_app && nohup python app.py &
-  args:
-    chdir: /src/my_app
+  shell: cd /src/my_app && nohup python app.py &
   async: 45
   poll: 5  
   tags:
