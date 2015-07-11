@@ -24,7 +24,6 @@
   tags:
     - green-nodes
 
-# Create new blue servers (show always be created anew)
 - name: Create blue servers
   local_action:    
     module: rax
@@ -48,6 +47,31 @@
   debug: var=workshop_blue_nodes
   tags:
     - blue-nodes
+
+# Create new ephemeral servers (show always be created anew)
+- name: Create ephemeral servers
+  local_action:    
+    module: rax
+    credentials: "{{ creds_servers_path }}"
+    name: "{{ server_name }}"
+    flavor: "{{ flavor }}"
+    image: "{{ image }}"
+    region: "{{ region }}"
+    state: present
+    count: "{{ count + new_count }}"
+    group: "{{ group_environ }}"
+    count_offset: 1
+    exact_count: yes
+    wait: yes
+  register: workshop_ephemeral_nodes
+  tags:
+    - ephemeral-nodes
+
+# Show new servers data
+- name: show created instances
+  debug: var=workshop_ephemeral_nodes
+  tags:
+    - ephemeral-nodes
 
 # Add new servers to raxio group, just as before
 - name: Add BLUE servers to raxio host group
@@ -80,3 +104,35 @@
   when: workshop_blue_nodes.action == "create"
   tags:
     - blue-nodes
+
+# Add new servers to raxio group, just as before
+- name: Add ephemeral servers to raxio host group
+  local_action:
+    module: add_host
+    hostname: "{{ item.name }}"
+    ansible_ssh_host: "{{ item.rax_accessipv4 }}"
+    ansible_ssh_pass: "{{ item.rax_adminpass }}"
+    ansible_ssh_user: root
+    groupname: workshop
+  with_items: workshop_ephemeral_nodes.success
+  when: workshop_ephemeral_nodes.action == "create"
+  tags:
+    - ephemeral-nodes
+
+# Add new servers to ephemeral load balancer
+- name: Add ephemeral servers to ephemeral Load balancer
+  local_action:
+    module: rax_clb_nodes
+    credentials: "{{ creds_servers_path }}"
+    load_balancer_id: "{{ raxio_ephemeral_load_balancer.balancer.id }}"
+    address: "{{ item.rax_addresses.private[0].addr }}"
+    port: "{{ server_port }}" 
+    condition: enabled
+    type: primary
+    wait: yes
+    wait_timeout: 180
+    region: "{{ region }}"
+  with_items: workshop_ephemeral_nodes.success
+  when: workshop_ephemeral_nodes.action == "create"
+  tags:
+    - ephemeral-nodes

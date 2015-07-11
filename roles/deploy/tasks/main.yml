@@ -1,6 +1,6 @@
 ---
 - name: Set up user
-  user: name=workshop shell=/bin/bash groups=admins,developers append=yes home=/home/workshop
+  user: name=workshop shell=/bin/bash home=/home/workshop
   tags:
     - deploy
 

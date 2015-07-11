@@ -45,3 +45,27 @@
   debug: var=raxio_blue_load_balancer
   tags:
     - blue-lb
+
+# Create ephemeral load balancer
+- name: Create ephemeral load balancer
+  local_action:
+    module: rax_clb
+    credentials: "{{ creds_servers_path }}"
+    name: "ephemeral-{{ load_balancer_name }}"
+    port: "{{ lb_port }}"
+    protocol: "{{ lb_protocol }}"
+    type: PUBLIC
+    timeout: 30
+    region: "{{ region }}"
+    wait: yes
+    wait_timeout: 180
+    state: present
+  register: raxio_ephemeral_load_balancer
+  tags:
+    - ephemeral-lb
+
+# Show ephemeral load balancer data
+- name: Show temporary ephemeral load balancer
+  debug: var=raxio_ephemeral_load_balancer
+  tags:
+    - ephemeral-lb
