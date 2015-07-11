@@ -82,7 +82,7 @@
     - deploy
 
 - name: Run npm install and bower install as workshop
-  command: su workshop -l -c 'npm install && bower install
+  command: su workshop -l -c 'npm install && bower install'
   tags:
     - deploy
     
