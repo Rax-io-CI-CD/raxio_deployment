@@ -76,13 +76,21 @@
   
 - name: Create ssh directory
   file: path=/home/workshop/.ssh state=directory mode=0755 owner=workshop group=workshop
-  tags: 
-    - deploy
+
+- name: Copy config
+  template: src={{item.src}} dest={{item.dest}} owner=workshop backup=yes
+  with_items:
+    - {src: ssh_config.j2 , dest: /home/workshop/.ssh/config }  
 
 - name: Copy config for root
   template: src={{item.src}} dest={{item.dest}} backup=yes
-  with_items:
+    with_items:
     - {src: ssh_config.j2 , dest: /root/.ssh/config }  
+  tags: 
+    - deploy
+
+- name: Fetch over ssh key
+  copy: src=/var/lib/jenkins/.ssh/id_rsa dest=/root/.ssh/id_rsa owner=root group=root mode=0400
   tags: 
     - deploy
   
@@ -90,6 +98,7 @@
   sudo: yes
   git: repo={{ repo }}
     dest=/home/workshop/workshop
+    accept_hostkey=yes
   tags: 
     - deploy
 
