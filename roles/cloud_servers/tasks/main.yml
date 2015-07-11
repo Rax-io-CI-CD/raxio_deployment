@@ -14,13 +14,13 @@
     count_offset: 1
     exact_count: yes
     wait: yes
-  register: raxio_green_nodes
+  register: workshop_green_nodes
   tags:
     - green-nodes
 
 # Show all instances
 - name: show created instances
-  debug: var=raxio_green_nodes
+  debug: var=workshop_green_nodes
   tags:
     - green-nodes
 
@@ -39,13 +39,13 @@
     count_offset: 1
     exact_count: yes
     wait: yes
-  register: raxio_blue_nodes
+  register: workshop_blue_nodes
   tags:
     - blue-nodes
 
 # Show new servers data
 - name: show created instances
-  debug: var=raxio_blue_nodes
+  debug: var=workshop_blue_nodes
   tags:
     - blue-nodes
 
@@ -57,9 +57,9 @@
     ansible_ssh_host: "{{ item.rax_accessipv4 }}"
     ansible_ssh_pass: "{{ item.rax_adminpass }}"
     ansible_ssh_user: root
-    groupname: raxio
-  with_items: raxio_blue_nodes.success
-  when: raxio_blue_nodes.action == "create"
+    groupname: workshop
+  with_items: workshop_blue_nodes.success
+  when: workshop_blue_nodes.action == "create"
   tags:
     - blue-nodes
 
@@ -76,7 +76,7 @@
     wait: yes
     wait_timeout: 180
     region: "{{ region }}"
-  with_items: raxio_blue_nodes.success
-  when: raxio_blue_nodes.action == "create"
+  with_items: workshop_blue_nodes.success
+  when: workshop_blue_nodes.action == "create"
   tags:
     - blue-nodes

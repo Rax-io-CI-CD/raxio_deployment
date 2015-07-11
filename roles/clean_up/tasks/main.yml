@@ -23,12 +23,11 @@
     flavor: "{{ flavor }}"
     image: "{{ image }}"
     region: "{{ region }}"
-    state: present
+    state: absent
     count: "{{ count }}"
     group: "{{ group_environ }}"
     count_offset: 1
     exact_count: yes
-    delete_youngest: True
     wait: yes
   tags:
     - clean-up-blue
@@ -72,6 +71,22 @@
     module: rax_clb
     credentials: "{{ creds_servers_path }}"
     name: "{{ load_balancer_name }}"
+    port: "{{ lb_port }}"
+    protocol: "{{ lb_protocol }}"
+    type: PUBLIC
+    timeout: 30
+    region: "{{ region }}"
+    wait: yes
+    wait_timeout: 180
+    state: absent
+  tags:
+    - purge
+
+- name: Remove BLUE load balancer
+  local_action:
+    module: rax_clb
+    credentials: "{{ creds_servers_path }}"
+    name: "blue-{{ load_balancer_name }}"
     port: "{{ lb_port }}"
     protocol: "{{ lb_protocol }}"
     type: PUBLIC
