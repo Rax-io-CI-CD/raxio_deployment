@@ -13,3 +13,4 @@ server_port:              443
 flavor:                   "performance1-2"
 count:                    1
 new_count:                1
+user_location:            "/home/workshop"
