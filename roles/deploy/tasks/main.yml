@@ -55,7 +55,7 @@
     - deploy
 
 - name: Create npm_global directory
-  file: path=/home/workshop/npm_global state=directory mode=0755
+  file: path=/home/workshop/npm_global state=directory mode=0755 owner=workshop group=workshop
   tags:
     - deploy
   
@@ -107,6 +107,11 @@
     dest=/home/workshop/workshop
     accept_hostkey=yes
   tags: 
+    - deploy
+
+- name: Set perms on workshop directory
+  file: path=/home/workshop/workshop state=directory mode=0755 owner=workshop group=workshop
+  tags:
     - deploy
 
 - name: Run npm install and bower install as workshop

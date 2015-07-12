@@ -58,7 +58,7 @@
     image: "{{ image }}"
     region: "{{ region }}"
     state: present
-    count: "{{ count + new_count }}"
+    count: "{{ count }}"
     group: "{{ group_environ }}"
     count_offset: 1
     exact_count: yes
