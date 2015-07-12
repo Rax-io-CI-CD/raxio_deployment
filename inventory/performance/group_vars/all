@@ -7,9 +7,9 @@ region:                   "DFW"
 load_balancer_name:       "{{ environ }}-lb"
 server_name:              "raxio-{{ environ }}%02d"
 creds_servers_path:       "~/.raxpub"
-lb_port:                  443
-lb_protocol:              "HTTPS"
-server_port:              443
+lb_port:                  80
+lb_protocol:              "HTTP"
+server_port:              9000
 flavor:                   "performance1-2"
 count:                    1
 new_count:                1

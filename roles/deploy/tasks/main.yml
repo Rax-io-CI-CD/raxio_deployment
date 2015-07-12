@@ -55,7 +55,7 @@
     - deploy
 
 - name: Create npm_global directory
-  file: path=/home/workshop/npm_global state=directory mode=0755 owner=workshop group=workshop
+  file: path=/home/workshop/npm_global state=directory mode=0755 owner=workshop group=workshop recurse=yes
   tags:
     - deploy
   
@@ -75,7 +75,7 @@
     - deploy
   
 - name: Create ssh directory
-  file: path=/home/workshop/.ssh state=directory mode=0755 owner=workshop group=workshop
+  file: path=/home/workshop/.ssh state=directory mode=0755 owner=workshop group=workshop recurse=yes
   tags:
     - deploy
 
@@ -110,7 +110,7 @@
     - deploy
 
 - name: Set perms on workshop directory
-  file: path=/home/workshop/workshop state=directory mode=0755 owner=workshop group=workshop
+  file: path=/home/workshop/workshop state=directory mode=0755 owner=workshop group=workshop recurse=yes
   tags:
     - deploy
 
