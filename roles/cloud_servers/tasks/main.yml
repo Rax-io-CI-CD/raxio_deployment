@@ -166,6 +166,4 @@
     timeout: 60
   with_items: workshop_ephemeral_nodes.success
   when: workshop_ephemeral_nodes.action == "create"
-  tags:
-    - ephemeral-nodes
     
