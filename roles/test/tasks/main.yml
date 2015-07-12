@@ -5,6 +5,6 @@
     - test-ephemeral
 
 - name: Set up template
-  template: src="protractor.conf.js.j2" dest="protractor.conf.js"
+  template: src="protractor.conf.js.j2" dest="/var/lib/jenkins/jobs/main_functional_test/protractor.conf.js"
   tags:
     - test-ephemeral
