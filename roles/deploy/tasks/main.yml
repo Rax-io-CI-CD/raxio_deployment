@@ -110,12 +110,12 @@
     - deploy
 
 - name: Run npm install and bower install as workshop
-  command: su workshop -l -c 'npm install && bower install'
+  command: su workshop -l -c 'cd /home/workshop/workshop && npm install && bower install'
   tags:
     - deploy
     
 - name: Run grunt
-  command: su workshop -l -c 'grunt serve'
+  command: su workshop -l -c 'cd /home/workshop/workshop && grunt serve'
   tags:
     - deploy
   
