@@ -116,11 +116,13 @@
 
 - name: Run npm install and bower install as workshop
   command: su workshop -l -c 'cd /home/workshop/workshop && npm install && bower install'
+  ignore_errors: yes
   tags:
     - deploy
     
 - name: Run grunt
   command: su workshop -l -c 'cd /home/workshop/workshop && grunt serve'
+  ignore_errors: yes
   tags:
     - deploy
   
