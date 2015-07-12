@@ -1,9 +1,10 @@
-- name: Test against a GREEN URL
-  local_action: script run_test.sh http://{{ raxio_green_load_balancer.balancer.virtual_ips[0].address }}
+- name: Save load balancer to use in test
+  set_fact:
+    load_balancer: "{{raxio_ephemeral_load_balancer.balancer.virtual_ips[0].address}}"
   tags:
-    - test-green
+    - test-ephemeral
 
-- name: Test against a blue URL
-  local_action: script run_test.sh http://{{ raxio_blue_load_balancer.balancer.virtual_ips[0].address }}
+- name: Set up template
+  template: src="protractor.conf.js.j2" dest="protractor.conf.js"
   tags:
-    - test-blue
+    - test-ephemeral
