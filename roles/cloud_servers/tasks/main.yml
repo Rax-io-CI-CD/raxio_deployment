@@ -92,8 +92,8 @@
   tags:
     - ephemeral-nodes
 
-# Add new servers to raxio group, just as before
-- name: Add BLUE servers to raxio host group
+# Add new servers to workshop group, just as before
+- name: Add BLUE servers to workshop host group
   local_action:
     module: add_host
     hostname: "{{ item.name }}"
@@ -124,8 +124,8 @@
   tags:
     - blue-nodes
 
-# Add new servers to raxio group, just as before
-- name: Add ephemeral servers to raxio host group
+# Add new servers to workshop group, just as before
+- name: Add ephemeral servers to workshop host group
   local_action:
     module: add_host
     hostname: "{{ item.name }}"
@@ -155,3 +155,16 @@
   when: workshop_ephemeral_nodes.action == "create"
   tags:
     - ephemeral-nodes
+
+- name: Wait for port 22 to become available
+  local_action: 
+    module: wait_for 
+    port: 22 
+    host: "{{ item.name }}" 
+    search_regex: OpenSSH 
+    delay: 10
+  with_items: workshop_ephemeral_nodes.success
+  when: workshop_ephemeral_nodes.action == "create"
+  tags:
+    - ephemeral-nodes
+    
