@@ -76,6 +76,8 @@
   
 - name: Create ssh directory
   file: path=/home/workshop/.ssh state=directory mode=0755 owner=workshop group=workshop
+  tags:
+    - deploy
 
 - name: Copy config
   template: src={{item.src}} dest={{item.dest}} owner=workshop backup=yes
