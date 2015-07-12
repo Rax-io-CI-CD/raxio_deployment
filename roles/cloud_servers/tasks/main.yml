@@ -78,6 +78,7 @@
     region: "{{ region }}"
     state: present
     count: "{{ count }}"
+    files: "{{ files }}"
     group: "{{ group_environ }}"
     count_offset: 1
     exact_count: yes
