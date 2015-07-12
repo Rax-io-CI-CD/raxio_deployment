@@ -49,6 +49,25 @@
     - blue-nodes
 
 # Create new ephemeral servers (show always be created anew)
+- name: Delete ephemeral servers
+  local_action:    
+    module: rax
+    credentials: "{{ creds_servers_path }}"
+    name: "{{ server_name }}"
+    flavor: "{{ flavor }}"
+    image: "{{ image }}"
+    region: "{{ region }}"
+    state: absent
+    count: "{{ count }}"
+    group: "{{ group_environ }}"
+    count_offset: 1
+    exact_count: yes
+    wait: yes
+  register: workshop_ephemeral_nodes
+  tags:
+    - ephemeral-nodes
+
+# Create new ephemeral servers (show always be created anew)
 - name: Create ephemeral servers
   local_action:    
     module: rax

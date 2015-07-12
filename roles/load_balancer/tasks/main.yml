@@ -46,6 +46,24 @@
   tags:
     - blue-lb
 
+# Delete ephemeral load balancer
+- name: Delete ephemeral load balancer
+  local_action:
+    module: rax_clb
+    credentials: "{{ creds_servers_path }}"
+    name: "ephemeral-{{ load_balancer_name }}"
+    port: "{{ lb_port }}"
+    protocol: "{{ lb_protocol }}"
+    type: PUBLIC
+    timeout: 30
+    region: "{{ region }}"
+    wait: yes
+    wait_timeout: 180
+    state: absent
+  register: raxio_ephemeral_load_balancer
+  tags:
+    - ephemeral-lb
+    
 # Create ephemeral load balancer
 - name: Create ephemeral load balancer
   local_action:
