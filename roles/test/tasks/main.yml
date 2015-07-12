@@ -5,6 +5,6 @@
     - test-ephemeral
 
 - name: Set up template
-  template: src="protractor.conf.js.j2" dest="{{ repo }}/protractor.conf.js"
+  template: src="protractor.conf.js.j2" dest="{{ workspace }}/protractor.conf.js"
   tags:
     - test-ephemeral
