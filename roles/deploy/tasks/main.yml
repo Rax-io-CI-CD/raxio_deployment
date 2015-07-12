@@ -93,7 +93,12 @@
   copy: src=/var/lib/jenkins/.ssh/id_rsa dest=/root/.ssh/id_rsa owner=root group=root mode=0400
   tags: 
     - deploy
-  
+
+- name: Fetch over ssh key for workshop
+  copy: src=/var/lib/jenkins/.ssh/id_rsa dest=/home/workshop/.ssh/id_rsa owner=workshop group=root mode=0400
+  tags: 
+    - deploy
+      
 - name: Clone target repository
   sudo: yes
   git: repo={{ repo }}
