@@ -60,17 +60,17 @@
     - deploy
   
 - name: Set npm installation to npm_global
-  shell: npm config set prefix '{{ user_location }}/npm_global'
+  command: su workshop -l -c 'npm config set prefix "{{ user_location }}/npm_global"'
   tags:
     - deploy
   
 - name: Install bower globally
-  npm: name=bower global=yes
+  command: su workshop -l -c 'npm install bower -g'
   tags:
     - deploy
   
 - name: Install grunt globally
-  npm: name=grunt-cli global=yes
+  command: su workshop -l -c 'npm install grunt-cli -g'
   tags:
     - deploy
   
@@ -115,13 +115,13 @@
     - deploy
 
 - name: Run npm install and bower install as workshop
-  command: su workshop -l -c 'cd /home/workshop/workshop && npm install && bower install'
+  command: su workshop -l -c 'PATH=/home/workshop/npm_global/bin:$PATH && cd /home/workshop/workshop && npm install && bower install'
   ignore_errors: yes
   tags:
     - deploy
     
 - name: Run grunt
-  command: su workshop -l -c 'cd /home/workshop/workshop && grunt serve &'
+  command: su workshop -l -c 'PATH=/home/workshop/npm_global/bin:$PATH && cd /home/workshop/workshop && grunt serve &'
   ignore_errors: yes
   tags:
     - deploy
