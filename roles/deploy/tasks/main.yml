@@ -121,8 +121,13 @@
     - deploy
     
 - name: Run grunt
-  command: su workshop -l -c 'cd /home/workshop/workshop && grunt serve'
+  command: su workshop -l -c 'cd /home/workshop/workshop && grunt serve &'
   ignore_errors: yes
   tags:
     - deploy
-  
+
+- name: Wait for port 9000 to become available
+  wait_for: port=9000 host=127.0.0.1 delay=30 timeout=60
+  tags:
+    - deploy
+      
