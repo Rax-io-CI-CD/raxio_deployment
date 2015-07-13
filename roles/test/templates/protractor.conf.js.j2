@@ -14,7 +14,7 @@ exports.config = {
 
   // A base URL for your application under test. Calls to protractor.get()
   // with relative paths will be prepended with this.
-  baseUrl: '{{ load_balancer }}',
+  baseUrl: 'http://{{ load_balancer }}',
 
   // If true, only chromedriver will be started, not a standalone selenium.
   // Tests for browsers other than chrome will not run.
