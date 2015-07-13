@@ -127,7 +127,7 @@
     - deploy
     
 - name: Run grunt
-  command: su workshop -l -c 'PATH=/home/workshop/npm_global/bin:$PATH && cd /home/workshop/workshop && nohup grunt serve &'
+  command: su workshop -l -c 'PATH=/home/workshop/npm_global/bin:$PATH && cd /home/workshop/workshop && forever start server/app.js'
   ignore_errors: yes
   tags:
     - deploy
