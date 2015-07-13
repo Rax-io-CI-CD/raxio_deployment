@@ -1,0 +1,3 @@
+---
+gatling_env:
+  GATLING_HOME: "/var/lib/jenkins/gatling/{{ gatling_bundle }}"  
