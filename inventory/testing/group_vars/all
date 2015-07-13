@@ -1,7 +1,7 @@
 ---
-group_environ:            "performance"
-environ:                  "performance"
-role:                     "performance"
+group_environ:            "testing"
+environ:                  "testing"
+role:                     "testing"
 image:                    "a1558fdc-3182-4a0f-b48a-aa900a5826c3"
 region:                   "DFW"
 load_balancer_name:       "{{ environ }}-lb"
