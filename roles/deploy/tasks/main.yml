@@ -106,6 +106,7 @@
   git: repo={{ repo }}
     dest=/home/workshop/workshop
     accept_hostkey=yes
+    version={{ branch }}
   tags: 
     - deploy
 
