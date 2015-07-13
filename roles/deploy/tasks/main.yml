@@ -74,6 +74,11 @@
   tags:
     - deploy
   
+- name: Install forever globally
+  command: su workshop -l -c 'npm install forever -g'
+  tags:
+    - deploy
+  
 - name: Create ssh directory
   file: path=/home/workshop/.ssh state=directory mode=0755 owner=workshop group=workshop recurse=yes
   tags:
