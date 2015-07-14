@@ -10,14 +10,29 @@
   tags:
     - test-ephemeral
 
-- name: Set up configuration
-  template: >
-                src=workshop.properties.j2
-                dest=/opt/workshop.properties
+# git clone repose version...create a module or steal it
+- name: Create the test directory
+  file: path=/var/lib/jenkins/gatling/{{ gatling_bundle}}/{{ simulations_directory }}/{{ test_package }} state=directory owner=jenkins group=jenkins 
   tags:
     - test-performance
 
-- name: Get configuration
-  fetch: src=/opt/workshop.properties dest="/var/lib/jenkins/gatling/{{ gatling_bundle}}/{{ data_directory }}/workshop.properties"
+- name: Copy over test
+  copy: >
+                src={{test_package}}/{{ gatling_test_name }}
+                dest=/var/lib/jenkins/gatling/{{ gatling_bundle}}/{{ simulations_directory }}/{{ test_package }}/{{ gatling_test_name }}
+                mode=0640
+  tags:
+    - test-performance
+
+- name: Copy over configuration
+  template: >
+                src=workshop.properties.j2
+                dest=/var/lib/jenkins/gatling/{{ gatling_bundle}}/{{ data_directory }}/workshop.properties
+  tags:
+    - test-performance
+
+- name: Run test
+  command: "/var/lib/jenkins/gatling/{{ gatling_bundle }}/bin/gatling -s {{ gatling_simulation }}"
+  environment: gatling_env 
   tags:
     - test-performance
