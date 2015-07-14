@@ -63,9 +63,30 @@
     count_offset: 1
     exact_count: yes
     wait: yes
+  ignore_errors: yes
+  register: delete_result
   tags:
     - purge
 
+- name: Remove every node for this environment AGAIN due to bugs
+  local_action:
+    module: rax
+    credentials: "{{ creds_servers_path }}"
+    name: "{{ server_name }}"
+    flavor: "{{ flavor }}"
+    image: "{{ image }}"
+    region: "{{ region }}"
+    state: absent
+    count: "{{ count + new_count }}"
+    group: "{{ group_environ }}"
+    count_offset: 1
+    exact_count: yes
+    wait: yes
+  ignore_errors: yes
+  when: delete_result|failed
+  tags:
+    - purge
+    
 - name: Remove live load balancer
   local_action:
     module: rax_clb
@@ -79,6 +100,7 @@
     wait: yes
     wait_timeout: 180
     state: absent
+  ignore_errors: yes
   tags:
     - purge
 
@@ -95,5 +117,6 @@
     wait: yes
     wait_timeout: 180
     state: absent
+  ignore_errors: yes
   tags:
     - purge
