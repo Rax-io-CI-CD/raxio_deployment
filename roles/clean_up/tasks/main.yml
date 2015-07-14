@@ -120,3 +120,21 @@
   ignore_errors: yes
   tags:
     - purge
+
+# Delete ephemeral load balancer
+- name: Delete ephemeral load balancer
+  local_action:
+    module: rax_clb
+    credentials: "{{ creds_servers_path }}"
+    name: "ephemeral-{{ load_balancer_name }}"
+    port: "{{ lb_port }}"
+    protocol: "{{ lb_protocol }}"
+    type: PUBLIC
+    timeout: 30
+    region: "{{ region }}"
+    wait: yes
+    wait_timeout: 180
+    state: absent
+  ignore_errors: yes
+  tags:
+    - purge    
