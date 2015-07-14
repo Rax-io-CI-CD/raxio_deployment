@@ -33,7 +33,5 @@
 
 - name: Run test
   command: "/var/lib/jenkins/gatling/{{ gatling_bundle }}/bin/gatling -s {{ gatling_simulation }}"
-  async: "{{ duration_with_wait }}"
-  poll: 60
   tags:
     - test-performance
