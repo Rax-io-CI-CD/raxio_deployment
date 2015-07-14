@@ -32,7 +32,7 @@
     - test-performance
 
 - name: Run test
-  command: "/var/lib/jenkins/gatling/{{ gatling_bundle }}/bin/gatling.sh -s {{ gatling_simulation }}"
+  command: "/var/lib/jenkins/gatling/{{ gatling_bundle }}/bin/gatling.sh -s {{ gatling_simulation }} -rf {{ workspace }}"
   environment: gatling_env 
   tags:
     - test-performance
