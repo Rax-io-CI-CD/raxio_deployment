@@ -18,7 +18,7 @@
 
 - name: Copy over test
   copy: >
-                src=repo/{{ gatling_test_name }}
+                src={{test_package}}/{{ gatling_test_name }}
                 dest=/var/lib/jenkins/gatling/{{ gatling_bundle}}/{{ simulations_directory }}/{{ test_package }}/{{ gatling_test_name }}
                 mode=0640
   tags:
