@@ -159,12 +159,12 @@
 
 - name: Wait for port 22 to become available
   local_action: 
-    module: wait_for 
-    port: 22 
-    host: "{{ item.name }}" 
-    search_regex: OpenSSH 
-    delay: 10
-    timeout: 60
+    wait_for port=22 host="{{ item.name }}" 
+    delay=10
+    timeout=60
+    connection_timeout=30
   with_items: workshop_ephemeral_nodes.success
   when: workshop_ephemeral_nodes.action == "create"
+  tags:
+    - ephemeral-nodes
     
