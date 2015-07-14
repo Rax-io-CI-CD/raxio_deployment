@@ -13,11 +13,11 @@
 - name: Set up configuration
   template: >
                 src=workshop.properties.j2
-                dest=/workshop.properties
+                dest=/opt/workshop.properties
   tags:
     - test-performance
 
 - name: Get configuration
-  fetch: src=/workshop.properties dest="/var/lib/jenkins/gatling/{{ gatling_bundle}}/{{ data_directory }}/workshop.properties"
+  fetch: src=/opt/workshop.properties dest="/var/lib/jenkins/gatling/{{ gatling_bundle}}/{{ data_directory }}/workshop.properties"
   tags:
     - test-performance
