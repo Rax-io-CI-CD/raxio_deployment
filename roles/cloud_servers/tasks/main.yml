@@ -102,8 +102,7 @@
     ansible_ssh_pass: "{{ item.rax_adminpass }}"
     ansible_ssh_user: root
     groupname: workshop
-  with_items: workshop_blue_nodes.success
-  when: workshop_blue_nodes.action == "create"
+  with_items: workshop_blue_nodes.instances
   tags:
     - blue-nodes
 
@@ -120,8 +119,7 @@
     wait: yes
     wait_timeout: 180
     region: "{{ region }}"
-  with_items: workshop_blue_nodes.success
-  when: workshop_blue_nodes.action == "create"
+  with_items: workshop_blue_nodes.instances
   tags:
     - blue-nodes
 
@@ -134,8 +132,7 @@
     ansible_ssh_pass: "{{ item.rax_adminpass }}"
     ansible_ssh_user: root
     groupname: workshop
-  with_items: workshop_ephemeral_nodes.success
-  when: workshop_ephemeral_nodes.action == "create"
+  with_items: workshop_ephemeral_nodes.instances
   tags:
     - ephemeral-nodes
 
@@ -152,18 +149,10 @@
     wait: yes
     wait_timeout: 180
     region: "{{ region }}"
-  with_items: workshop_ephemeral_nodes.success
-  when: workshop_ephemeral_nodes.action == "create"
+  with_items: workshop_ephemeral_nodes.instances
   tags:
     - ephemeral-nodes 
 
 - name: Wait for port 22 to become available
   wait_for: port=22 host="{{ item.name }}" delay=10 timeout=60 connect_timeout=30
-  with_items: workshop_ephemeral_nodes.success
-  when: workshop_ephemeral_nodes.action == "create"
-
-- name: Pause for 1 minute
-  pause: 1 minutes
-  tags:
-    - ephemeral-nodes 
-        
+  with_items: workshop_ephemeral_nodes.instances
