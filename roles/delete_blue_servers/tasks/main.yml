@@ -41,7 +41,6 @@
     state: absent
     count: "{{ new_count | int }}"
     group: "{{ group_environ }}"
-    networks: "{{ environ }}-{{ region }}"
     count_offset: 1
     exact_count: yes
     wait: yes
@@ -60,7 +59,6 @@
     state: absent
     count: "{{ new_count | int }}"
     group: "{{ group_environ }}"
-    networks: "{{ environ }}-{{ region }}"
     count_offset: 1
     exact_count: yes
     wait: yes

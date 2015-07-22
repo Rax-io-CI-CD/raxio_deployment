@@ -1,13 +1,3 @@
-# Create Rackspace Cloud Network
-- name: Create Rackspace Cloud Network
-  local_action:
-    module: rax_network
-    credentials: "{{ creds_servers_path }}"
-    region: "{{ region | upper }}"
-    label: "{{ environ }}-{{ region }}"
-    cidr: "{{ network_cidr }}"
-    state: present
-
 # Create new blue servers (show always be created anew)
 - name: "Create blue servers"
   local_action:    
@@ -17,10 +7,6 @@
     flavor: "{{ flavor }}"
     image: "{{ image }}"
     region: "{{ region }}"
-    networks:
-      - public
-      - private
-      - "{{ environ }}-{{ region }}"
     state: present
     count: "{{ new_count | int }}"
     group: "{{ group_environ }}"
