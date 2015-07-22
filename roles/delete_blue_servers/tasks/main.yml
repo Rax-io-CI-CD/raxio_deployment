@@ -34,9 +34,9 @@
   local_action:
     module: rax
     credentials: "{{ creds_servers_path }}"
-    name: "{{ app_server_name }}"
-    flavor: "{{ app_flavor }}"
-    image: "{{ app_image }}"
+    name: "{{ server_name }}"
+    flavor: "{{ flavor }}"
+    image: "{{ image }}"
     region: "{{ region }}"
     state: absent
     count: "{{ new_count | int }}"
@@ -53,9 +53,9 @@
   local_action:
     module: rax
     credentials: "{{ creds_servers_path }}"
-    name: "{{ app_server_name }}"
-    flavor: "{{ app_flavor }}"
-    image: "{{ app_image }}"
+    name: "{{ server_name }}"
+    flavor: "{{ flavor }}"
+    image: "{{ image }}"
     region: "{{ region }}"
     state: absent
     count: "{{ new_count | int }}"
