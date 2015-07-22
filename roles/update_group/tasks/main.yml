@@ -1,0 +1,12 @@
+# Show all instances
+- name: show created instances
+  debug: var="{{ group_environ }}"
+
+- name: Migrate servers to another group
+  local_action:
+    module: rax_meta
+    credentials: "{{ creds_servers_path }}"
+    name: "{{ inventory_hostname }}"
+    region: "{{ region }}"
+    meta:
+      group: "{{ transition_group_environ }}"

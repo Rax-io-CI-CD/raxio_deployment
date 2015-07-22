@@ -1,0 +1,60 @@
+# Create Rackspace Cloud Network
+- name: Create Rackspace Cloud Network
+  local_action:
+    module: rax_network
+    credentials: "{{ creds_servers_path }}"
+    region: "{{ region | upper }}"
+    label: "{{ environ }}-{{ region }}"
+    cidr: "{{ network_cidr }}"
+    state: present
+
+# Create new blue servers (show always be created anew)
+- name: "Create blue servers"
+  local_action:    
+    module: rax
+    credentials: "{{ creds_servers_path }}"
+    name: "{{ app_server_name }}"
+    flavor: "{{ app_flavor }}"
+    image: "{{ app_image }}"
+    region: "{{ region }}"
+    networks:
+      - public
+      - private
+      - "{{ environ }}-{{ region }}"
+    state: present
+    count: "{{ new_count | int }}"
+    group: "{{ group_environ }}"
+    count_offset: 1
+    exact_count: yes
+    files: "{{ files }}"
+    wait: yes
+    wait_timeout: 600
+  register: blue_nodes
+
+# Add new servers to workshop group, just as before
+- name: Add BLUE servers to workshop host group
+  local_action:
+    module: add_host
+    hostname: "{{ item.name }}"
+    ansible_ssh_host: "{{ item.rax_accessipv4 }}"
+    ansible_ssh_pass: "{{ item.rax_adminpass }}"
+    ansible_ssh_user: root
+    groupname: workshop
+  with_items: blue_nodes.success
+  when: blue_nodes.action == "create"
+
+# Add new servers to blue load balancer
+- name: Add BLUE servers to Blue Load balancer
+  local_action:
+    module: rax_clb_nodes
+    credentials: "{{ creds_servers_path }}"
+    load_balancer_id: "{{ workshop_blue_load_balancer.balancer.id }}"
+    address: "{{ item.rax_addresses.private[0].addr }}"
+    port: "{{ server_port }}" 
+    condition: enabled
+    type: primary
+    wait: yes
+    wait_timeout: 600
+    region: "{{ region }}"
+  with_items: blue_nodes.success
+  when: blue_nodes.action == "create"

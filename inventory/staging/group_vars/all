@@ -1,0 +1,16 @@
+---
+group_environ:            "staging"
+environ:                  "staging"
+role:                     "staging"
+image:                    "a1558fdc-3182-4a0f-b48a-aa900a5826c3"
+region:                   "DFW"
+load_balancer_name:       "{{ environ }}-lb"
+server_name:              "raxio-{{ environ }}%02d"
+creds_servers_path:       "~/.raxpub"
+lb_port:                  80
+lb_protocol:              "HTTP"
+server_port:              9000
+flavor:                   "performance1-2"
+count:                    1
+new_count:                1
+user_location:            "/home/workshop"

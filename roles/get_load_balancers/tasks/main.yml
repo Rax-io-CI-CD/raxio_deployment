@@ -1,0 +1,39 @@
+# This will either create a new live load balancer or return the old one
+- name: Retrieve live load balancer
+  local_action:
+    module: rax_clb
+    credentials: "{{ creds_servers_path }}"
+    name: "green-{{ load_balancer_name }}"
+    port: "{{ lb_port }}"
+    protocol: "{{ lb_protocol }}"
+    type: PUBLIC
+    timeout: 30
+    region: "{{ region }}"
+    wait: yes
+    wait_timeout: 600
+    state: present
+  register: workshop_green_load_balancer
+
+# Debug the live load balancer data
+- name: Show live load balancer
+  debug: var=workshop_green_load_balancer
+
+# Retrieve blue load balancer
+- name: Retrieve blue load balancer
+  local_action:
+    module: rax_clb
+    credentials: "{{ creds_servers_path }}"
+    name: "blue-{{ load_balancer_name }}"
+    port: "{{ lb_port }}"
+    protocol: "{{ lb_protocol }}"
+    type: PUBLIC
+    timeout: 30
+    region: "{{ region }}"
+    wait: yes
+    wait_timeout: 600
+    state: present
+  register: workshop_blue_load_balancer
+
+# Show blue load balancer data
+- name: Show temporary blue load balancer
+  debug: var=workshop_blue_load_balancer

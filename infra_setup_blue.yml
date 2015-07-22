@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: True
+  vars:
+    - files:
+        /root/.ssh/authorized_keys: /var/lib/jenkins/.ssh/id_rsa.pub
+  roles:
+     - blue_load_balancer
+     - delete_blue_servers
+     - create_blue_servers
+
+- hosts: workshop
+  gather_facts: True 
+  roles: 
+     - deploy

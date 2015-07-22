@@ -1,0 +1,69 @@
+# get blue load balancer
+- name: Retrieve blue load balancer
+  local_action:
+    module: rax_clb
+    credentials: "{{ creds_servers_path }}"
+    name: "blue-{{ load_balancer_name }}"
+    port: "{{ lb_port }}"
+    protocol: "{{ lb_protocol }}"
+    type: PUBLIC
+    timeout: 30
+    region: "{{ region }}"
+    wait: yes
+    wait_timeout: 600
+    state: present
+  register: workshop_blue_load_balancer
+
+# remove nodes from blue lb
+- name: remove the node from load balancer
+  local_action:
+    module: rax_clb_nodes
+    credentials: "{{ creds_servers_path }}"
+    load_balancer_id: "{{ workshop_blue_load_balancer.balancer.id }}"
+    node_id: "{{ item.id }}"
+    condition: disabled
+    wait: true
+    state: absent
+    wait_timeout: 180
+    region: "{{ region }}"
+  with_items: workshop_blue_load_balancer.balancer.nodes
+  when: workshop_blue_load_balancer.balancer.nodes is defined
+
+# remove nodes
+- name: Remove nodes
+  local_action:
+    module: rax
+    credentials: "{{ creds_servers_path }}"
+    name: "{{ app_server_name }}"
+    flavor: "{{ app_flavor }}"
+    image: "{{ app_image }}"
+    region: "{{ region }}"
+    state: absent
+    count: "{{ new_count | int }}"
+    group: "{{ group_environ }}"
+    networks: "{{ environ }}-{{ region }}"
+    count_offset: 1
+    exact_count: yes
+    wait: yes
+    wait_timeout: 600
+  ignore_errors: yes
+  register: result
+
+- name: Remove  nodes AGAIN IF BROKE
+  local_action:
+    module: rax
+    credentials: "{{ creds_servers_path }}"
+    name: "{{ app_server_name }}"
+    flavor: "{{ app_flavor }}"
+    image: "{{ app_image }}"
+    region: "{{ region }}"
+    state: absent
+    count: "{{ new_count | int }}"
+    group: "{{ group_environ }}"
+    networks: "{{ environ }}-{{ region }}"
+    count_offset: 1
+    exact_count: yes
+    wait: yes
+    wait_timeout: 600
+  ignore_errors: yes
+  when: result|failed

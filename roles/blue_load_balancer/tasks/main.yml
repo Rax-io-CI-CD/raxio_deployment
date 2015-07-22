@@ -1,0 +1,34 @@
+# Create blue load balancer
+- name: Create blue load balancer
+  local_action:
+    module: rax_clb
+    credentials: "{{ creds_servers_path }}"
+    name: "blue-{{ load_balancer_name }}"
+    port: "{{ lb_port }}"
+    protocol: "{{ lb_protocol }}"
+    type: PUBLIC
+    timeout: 30
+    region: "{{ region }}"
+    wait: yes
+    wait_timeout: 600
+    state: present
+  register: workshop_blue_load_balancer
+
+# Drain blue load balancer (noop if new)
+- name: remove the nodes
+  local_action:
+    module: rax_clb_nodes
+    credentials: "{{ creds_servers_path }}"
+    load_balancer_id: "{{ workshop_blue_load_balancer.balancer.id }}"
+    node_id: "{{ item.id }}"
+    condition: disabled
+    wait: true
+    state: absent
+    wait_timeout: 180
+    region: "{{ region }}"
+  with_items: workshop_blue_load_balancer.balancer.nodes
+  when: workshop_blue_load_balancer.balancer.nodes is defined
+
+# Show blue load balancer data
+- name: Show temporary blue load balancer
+  debug: var=workshop_blue_load_balancer

@@ -1,0 +1,9 @@
+---
+- hosts: "{{ group_environ }}"
+  connection: local
+  gather_facts: True
+  vars:
+    - files:
+        /root/.ssh/authorized_keys: /var/lib/jenkins/.ssh/id_rsa.pub
+  roles:
+     - update_group
