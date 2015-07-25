@@ -3,7 +3,7 @@
   local_action:
     module: rax_clb_nodes
     credentials: "{{ creds_servers_path }}"
-    load_balancer_id: "{{ raxio_green_load_balancer.balancer.id }}"
+    load_balancer_id: "{{ workshop_green_load_balancer.balancer.id }}"
     address: "{{ item.address }}"
     port: "{{ server_port }}" 
     condition: enabled
@@ -11,7 +11,7 @@
     wait: yes
     wait_timeout: 180
     region: "{{ region }}"
-  with_items: raxio_blue_load_balancer.balancer.nodes
+  with_items: workshop_blue_load_balancer.balancer.nodes
   tags:
     - blue-to-green
 
@@ -20,13 +20,13 @@
   local_action:
     module: rax_clb_nodes
     credentials: "{{ creds_servers_path }}"
-    load_balancer_id: "{{ raxio_green_load_balancer.balancer.id }}"
+    load_balancer_id: "{{ workshop_green_load_balancer.balancer.id }}"
     node_id: "{{ item.id }}"
     condition: draining 
     wait: true
     wait_timeout: 180
     region: "{{ region }}"
-  with_items: raxio_green_load_balancer.balancer.nodes
+  with_items: workshop_green_load_balancer.balancer.nodes
   tags:
     - blue-to-green
 
@@ -44,13 +44,13 @@
   local_action:
     module: rax_clb_nodes
     credentials: "{{ creds_servers_path }}"
-    load_balancer_id: "{{ raxio_green_load_balancer.balancer.id }}"
+    load_balancer_id: "{{ workshop_green_load_balancer.balancer.id }}"
     node_id: "{{ item.id }}"
     condition: disabled
     wait: true
     wait_timeout: 180
     region: "{{ region }}"
-  with_items: raxio_green_load_balancer.balancer.nodes
+  with_items: workshop_green_load_balancer.balancer.nodes
   tags:
     - blue-to-green
 
@@ -58,14 +58,14 @@
   local_action:
     module: rax_clb_nodes
     credentials: "{{ creds_servers_path }}"
-    load_balancer_id: "{{ raxio_green_load_balancer.balancer.id }}"
+    load_balancer_id: "{{ workshop_green_load_balancer.balancer.id }}"
     node_id: "{{ item.id }}"
     condition: disabled
     wait: true
     state: absent
     wait_timeout: 180
     region: "{{ region }}"
-  with_items: raxio_green_load_balancer.balancer.nodes
+  with_items: workshop_green_load_balancer.balancer.nodes
   tags:
     - blue-to-green
 
@@ -73,7 +73,7 @@
   local_action:
     module: rax_clb_nodes
     credentials: "{{ creds_servers_path }}"
-    load_balancer_id: "{{ raxio_blue_load_balancer.balancer.id }}"
+    load_balancer_id: "{{ workshop_blue_load_balancer.balancer.id }}"
     address: "{{ item.address }}"
     port: "{{ server_port }}" 
     condition: enabled
@@ -81,7 +81,7 @@
     wait: yes
     wait_timeout: 180
     region: "{{ region }}"
-  with_items: raxio_green_load_balancer.balancer.nodes
+  with_items: workshop_green_load_balancer.balancer.nodes
   tags:
     - blue-to-green
 
